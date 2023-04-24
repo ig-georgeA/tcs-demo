@@ -1,62 +1,62 @@
-using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace Team_collaboration_1.Northwind
 {
     public class NorthwindService: INorthwindService
     {
-        private readonly HttpClient _http;
+        private readonly IWebHostEnvironment _env;
 
-        public NorthwindService(HttpClient http)
+        public NorthwindService(IWebHostEnvironment env)
         {
-            _http = http;
+            _env = env;
         }
 
         public async Task<List<OrdersType>> GetOrders()
         {
-            using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, new Uri("/static-data/northwind-orders.json", UriKind.RelativeOrAbsolute));
-            using HttpResponseMessage response = await _http.SendAsync(request).ConfigureAwait(false);
-            if (response.IsSuccessStatusCode)
+            var options = new JsonSerializerOptions(new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var path = _env.WebRootPath + "/static-data/northwind-orders.json";
+            if (!File.Exists(path))
             {
-                return await response.Content.ReadFromJsonAsync<List<OrdersType>>().ConfigureAwait(false);
+                return new List<OrdersType>();
             }
-
-            return new List<OrdersType>();
+            var data = File.ReadAllText(path);
+            return await Task.FromResult(JsonSerializer.Deserialize<List<OrdersType>>(data, options));
         }
 
         public async Task<List<CustomersType>> GetCustomers()
         {
-            using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, new Uri("/static-data/northwind-customers.json", UriKind.RelativeOrAbsolute));
-            using HttpResponseMessage response = await _http.SendAsync(request).ConfigureAwait(false);
-            if (response.IsSuccessStatusCode)
+            var options = new JsonSerializerOptions(new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var path = _env.WebRootPath + "/static-data/northwind-customers.json";
+            if (!File.Exists(path))
             {
-                return await response.Content.ReadFromJsonAsync<List<CustomersType>>().ConfigureAwait(false);
+                return new List<CustomersType>();
             }
-
-            return new List<CustomersType>();
+            var data = File.ReadAllText(path);
+            return await Task.FromResult(JsonSerializer.Deserialize<List<CustomersType>>(data, options));
         }
 
         public async Task<List<EmployeesType>> GetEmployees()
         {
-            using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, new Uri("/static-data/northwind-employees.json", UriKind.RelativeOrAbsolute));
-            using HttpResponseMessage response = await _http.SendAsync(request).ConfigureAwait(false);
-            if (response.IsSuccessStatusCode)
+            var options = new JsonSerializerOptions(new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var path = _env.WebRootPath + "/static-data/northwind-employees.json";
+            if (!File.Exists(path))
             {
-                return await response.Content.ReadFromJsonAsync<List<EmployeesType>>().ConfigureAwait(false);
+                return new List<EmployeesType>();
             }
-
-            return new List<EmployeesType>();
+            var data = File.ReadAllText(path);
+            return await Task.FromResult(JsonSerializer.Deserialize<List<EmployeesType>>(data, options));
         }
 
         public async Task<List<SuppliersType>> GetSuppliers()
         {
-            using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, new Uri("/static-data/northwind-suppliers.json", UriKind.RelativeOrAbsolute));
-            using HttpResponseMessage response = await _http.SendAsync(request).ConfigureAwait(false);
-            if (response.IsSuccessStatusCode)
+            var options = new JsonSerializerOptions(new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var path = _env.WebRootPath + "/static-data/northwind-suppliers.json";
+            if (!File.Exists(path))
             {
-                return await response.Content.ReadFromJsonAsync<List<SuppliersType>>().ConfigureAwait(false);
+                return new List<SuppliersType>();
             }
-
-            return new List<SuppliersType>();
+            var data = File.ReadAllText(path);
+            return await Task.FromResult(JsonSerializer.Deserialize<List<SuppliersType>>(data, options));
         }
     }
 }
